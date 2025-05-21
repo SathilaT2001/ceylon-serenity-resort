@@ -2,7 +2,7 @@
 import React from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Wifi, Utensils, Spa, CreditCard } from 'lucide-react';
+import { Wifi, Utensils, Bath, CreditCard } from 'lucide-react';
 
 interface Service {
   id: string;

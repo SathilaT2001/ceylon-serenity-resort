@@ -13,18 +13,33 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { CalendarIcon, CreditCard, Wifi, Utensils, Spa } from 'lucide-react';
+import { CalendarIcon, CreditCard, Wifi, Utensils, Bath } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
-const roomTypes = [
+interface RoomType {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  pricePerNight: number;
+  capacity: string;
+  features: string[];
+  amenities: string[];
+  image: string;
+  tag?: string;
+}
+
+const roomTypes: RoomType[] = [
   {
     id: 'deluxe',
     name: 'Deluxe Room',
     description: 'Spacious and comfortable accommodations with modern amenities.',
     pricePerNight: 150,
+    price: 150,
     capacity: '2 Adults, 1 Child',
+    features: ['King Bed', 'Ocean View', 'Free Wi-Fi', 'Mini Bar'],
     amenities: ['King Bed', 'Ocean View', 'Free Wi-Fi', 'Mini Bar'],
     image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070'
   },
@@ -33,7 +48,9 @@ const roomTypes = [
     name: 'Executive Suite',
     description: 'Luxurious suite with separate living area and premium amenities.',
     pricePerNight: 250,
+    price: 250,
     capacity: '2 Adults, 2 Children',
+    features: ['King Bed', 'Balcony', 'Jacuzzi', 'Lounge Area'],
     amenities: ['King Bed', 'Balcony', 'Jacuzzi', 'Lounge Area'],
     image: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2070'
   },
@@ -42,7 +59,9 @@ const roomTypes = [
     name: 'Family Room',
     description: 'Perfect for families with spacious layout and convenient amenities.',
     pricePerNight: 200,
+    price: 200,
     capacity: '2 Adults, 2 Children',
+    features: ['2 Queen Beds', 'Kids Area', 'Family Entertainment', 'Kitchenette'],
     amenities: ['2 Queen Beds', 'Kids Area', 'Family Entertainment', 'Kitchenette'],
     image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=2074'
   },
@@ -51,7 +70,9 @@ const roomTypes = [
     name: 'Beachfront Villa',
     description: 'Exclusive villa with direct beach access and private pool.',
     pricePerNight: 450,
+    price: 450,
     capacity: '2 Adults',
+    features: ['King Bed', 'Private Pool', 'Direct Beach Access', 'Outdoor Dining'],
     amenities: ['King Bed', 'Private Pool', 'Direct Beach Access', 'Outdoor Dining'],
     image: 'https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?q=80&w=2025'
   },
@@ -77,7 +98,7 @@ const services = [
     name: 'Spa Package',
     description: 'Relaxing massage and wellness treatments',
     price: 120,
-    icon: <Spa className="h-6 w-6 text-primary" />
+    icon: <Bath className="h-6 w-6 text-primary" />
   },
   {
     id: 'airport',

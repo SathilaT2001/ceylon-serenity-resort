@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Spa, Utensils, Calendar, Wifi, CreditCard } from 'lucide-react';
+import { Bath, Utensils, Calendar, Wifi, CreditCard } from 'lucide-react';
 
 const Services = () => {
   return (
@@ -32,7 +31,7 @@ const Services = () => {
               <CardHeader>
                 <div className="flex items-center space-x-3">
                   <span className="p-2 bg-primary/10 rounded-full">
-                    <Spa className="h-6 w-6 text-primary" />
+                    <Bath className="h-6 w-6 text-primary" />
                   </span>
                   <CardTitle>Serene Spa Experience</CardTitle>
                 </div>
@@ -258,7 +257,7 @@ const Services = () => {
                     <span>Breakfast Buffet</span>
                   </li>
                   <li className="flex items-center">
-                    <Spa className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <Bath className="h-4 w-4 mr-2 text-muted-foreground" />
                     <span>Beach Loungers</span>
                   </li>
                   <li className="flex items-center">
