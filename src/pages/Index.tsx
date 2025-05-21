@@ -53,10 +53,10 @@ const Index = () => {
       </section>
 
       {/* Services Highlights */}
-      <ServiceHighlights />
+      {/* <ServiceHighlights /> */}
 
       {/* Booking Steps Section */}
-      <section className="bg-accent/20 py-16">
+      {/* <section className="bg-accent/20 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl text-primary mb-4">Book Your Stay in 3 Simple Steps</h2>
@@ -109,10 +109,10 @@ const Index = () => {
             </Button>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonials */}
-      <TestimonialSection />
+      {/* <TestimonialSection /> */}
     </div>
   );
 };

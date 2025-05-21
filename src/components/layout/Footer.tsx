@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          {/* <div>
             <h4 className="text-lg font-medium mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li><Link to="/rooms" className="text-gray-300 hover:text-primary">Our Rooms</Link></li>
@@ -46,16 +46,16 @@ const Footer: React.FC = () => {
               <li><Link to="/gallery" className="text-gray-300 hover:text-primary">Gallery</Link></li>
               <li><Link to="/contact" className="text-gray-300 hover:text-primary">Contact</Link></li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Guest Services */}
           <div>
             <h4 className="text-lg font-medium mb-4">Guest Services</h4>
             <ul className="space-y-2">
               <li><Link to="/booking" className="text-gray-300 hover:text-primary">Book a Room</Link></li>
-              <li><Link to="/auth" className="text-gray-300 hover:text-primary">Guest Login</Link></li>
-              <li><Link to="/special-offers" className="text-gray-300 hover:text-primary">Special Offers</Link></li>
-              <li><Link to="/faq" className="text-gray-300 hover:text-primary">FAQs</Link></li>
+              <li><Link to="/" className="text-gray-300 hover:text-primary">Guest Login</Link></li>
+              <li><Link to="/" className="text-gray-300 hover:text-primary">Special Offers</Link></li>
+              <li><Link to="/" className="text-gray-300 hover:text-primary">FAQs</Link></li>
             </ul>
           </div>
 

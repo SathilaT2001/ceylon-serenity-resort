@@ -89,7 +89,7 @@ const Rooms = () => {
         ))}
       </div>
       
-      <div className="mt-16 bg-muted/30 rounded-lg p-8 text-center">
+      {/* <div className="mt-16 bg-muted/30 rounded-lg p-8 text-center">
         <h2 className="text-2xl font-serif font-bold mb-4">Special Packages</h2>
         <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
           Enhance your stay with our curated packages designed to make your experience truly memorable.
@@ -98,7 +98,7 @@ const Rooms = () => {
         <Button variant="outline" onClick={() => navigate('/booking')}>
           View Special Offers
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -23,9 +23,9 @@ const Header: React.FC = () => {
   const menuItems = [
     { name: 'Home', path: '/' },
     { name: 'Rooms', path: '/rooms' },
-    { name: 'Services', path: '/services' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    // { name: 'Services', path: '/services' },
+    // { name: 'About', path: '/about' },
+    // { name: 'Contact', path: '/contact' },
   ];
 
   return (
@@ -108,9 +108,9 @@ const Header: React.FC = () => {
                       <Link to="/auth?mode=signup" className="w-full">Register</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    {/* <DropdownMenuItem>
                       <Link to="/admin" className="w-full">Admin</Link>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                   </>
                 )}
               </DropdownMenuContent>

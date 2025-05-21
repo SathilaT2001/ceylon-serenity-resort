@@ -144,7 +144,8 @@ const Auth = () => {
                     <div className="text-center text-sm">
                       <p className="text-muted-foreground mb-1">Demo Credentials:</p>
                       <p className="text-muted-foreground text-xs">Admin: admin@ceylon.com / admin123</p>
-                      <p className="text-muted-foreground text-xs mb-3">Guest: guest@example.com / guest123</p>
+                      {/* <p className="text-muted-foreground text-xs">Guest: guest@example.com / guest123</p> */}
+                      <p className="text-muted-foreground text-xs mb-3">Employee: employee@ceylon.com / employee123</p>
                       
                       <div className="mt-2">
                         Don't have an account?{" "}
@@ -257,7 +258,7 @@ const Auth = () => {
               </TabsContent>
             </Tabs>
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
+          {/* <CardFooter className="flex flex-col space-y-4">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t"></div>
@@ -270,7 +271,7 @@ const Auth = () => {
               <Button variant="outline" onClick={() => toast({ description: "Social login would be implemented in a real app." })}>Google</Button>
               <Button variant="outline" onClick={() => toast({ description: "Social login would be implemented in a real app." })}>Facebook</Button>
             </div>
-          </CardFooter>
+          </CardFooter> */}
         </Card>
       </div>
     </div>
