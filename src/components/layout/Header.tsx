@@ -65,14 +65,7 @@ const Header: React.FC = () => {
                 <Calendar className="h-4 w-4 mr-2" />
                 <span>Book Now</span>
               </Button>
-            )}
-
-            {/* Bell icon */}
-            {isAuthenticated && (
-              <Button variant="ghost" size="icon">
-                <Bell className="h-5 w-5" />
-              </Button>
-            )}
+            )}  
 
             {/* User menu */}
             <DropdownMenu>
