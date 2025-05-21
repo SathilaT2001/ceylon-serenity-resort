@@ -64,17 +64,6 @@ const roomTypes: RoomType[] = [
     amenities: ['2 Queen Beds', 'Kids Area', 'Family Entertainment', 'Kitchenette'],
     image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=2074'
   },
-  {
-    id: 'villa',
-    name: 'Beachfront Villa',
-    description: 'Exclusive villa with direct beach access and private pool.',
-    pricePerNight: 450,
-    price: 450,
-    capacity: '2 Adults',
-    features: ['King Bed', 'Private Pool', 'Direct Beach Access', 'Outdoor Dining'],
-    amenities: ['King Bed', 'Private Pool', 'Direct Beach Access', 'Outdoor Dining'],
-    image: 'https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?q=80&w=2025'
-  },
 ];
 
 const services = [

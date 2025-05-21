@@ -10,7 +10,7 @@ const HeroSection: React.FC = () => {
       {/* Placeholder for hero image - would be a real image in production */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-black/30 z-10" />
       <div 
-        className="absolute inset-0 bg-[url('/placeholder.svg')] bg-cover bg-center"
+        className="absolute inset-0 bg-[url('https://images.luxuryescapes.com/q_auto:best,dpr_2.0/3xaa6v0yhq2kaf49cc4m')] bg-cover bg-center"
         style={{ backgroundPositionY: '30%' }}
       />
 
@@ -32,7 +32,7 @@ const HeroSection: React.FC = () => {
                 Book Now
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+            <Button asChild variant="outline" size="lg" className="border-white bg-transparant text-white hover:bg-white/10">
               <Link to="/rooms">
                 Explore Rooms
               </Link>

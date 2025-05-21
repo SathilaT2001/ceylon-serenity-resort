@@ -33,16 +33,6 @@ const roomTypes = [
     capacity: '2 Adults, 2 Children',
     image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=2074',
   },
-  {
-    id: 'villa',
-    name: 'Beachfront Villa',
-    description: 'Exclusive villa with direct beach access and private pool.',
-    features: ['King Bed', 'Private Pool', 'Direct Beach Access', 'Outdoor Dining'],
-    price: 450,
-    capacity: '2 Adults',
-    image: 'https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?q=80&w=2025',
-    tag: 'Best Seller',
-  },
 ];
 
 const Rooms = () => {
@@ -67,9 +57,7 @@ const Rooms = () => {
                 alt={room.name} 
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" 
               />
-              {room.tag && (
-                <Badge className="absolute top-4 right-4 bg-primary">{room.tag}</Badge>
-              )}
+              
             </div>
             <CardHeader>
               <CardTitle>{room.name}</CardTitle>

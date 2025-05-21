@@ -26,22 +26,22 @@ const Index = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <RoomFeatured 
-            title="Deluxe Ocean View"
-            description="Spacious room with breathtaking ocean views, king-sized bed, and modern amenities."
+            title="Deluxe Room"
+            description="Spacious and comfortable accommodations with modern amenities."
+            price={150}
+            image="https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=2070"
+          />
+          <RoomFeatured 
+            title="Executive Suite"
+            description="Luxurious suite with separate living area and premium amenities."
             price={250}
-            image="/placeholder.svg"
+            image="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2070"
           />
           <RoomFeatured 
-            title="Garden Suite"
-            description="Peaceful suite surrounded by lush tropical gardens with private terrace."
-            price={320}
-            image="/placeholder.svg"
-          />
-          <RoomFeatured 
-            title="Presidential Villa"
-            description="Ultimate luxury with private pool, ocean views, and exclusive butler service."
-            price={550}
-            image="/placeholder.svg"
+            title="Family Room"
+            description="Perfect for families with spacious layout and convenient amenities."
+            price={200}
+            image="https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=2074"
           />
         </div>
 
