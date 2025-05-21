@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -312,7 +311,7 @@ const Booking = () => {
                 <RoomTypeSelector 
                   roomTypes={roomTypes} 
                   selectedRoomType={selectedRoomType} 
-                  onSelectRoomType={(id) => setSelectedRoomType(id)}
+                  onSelectRoom={(id) => setSelectedRoomType(id)}
                 />
               </div>
             </CardContent>
