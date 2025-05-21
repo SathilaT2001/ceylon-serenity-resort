@@ -18,6 +18,16 @@ import Services from "./pages/Services";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 
+// Placeholder pages for admin routes
+import AdminReservations from "./pages/admin/AdminReservations";
+import AdminGuests from "./pages/admin/AdminGuests";
+import AdminServices from "./pages/admin/AdminServices";
+import AdminEmployees from "./pages/admin/AdminEmployees";
+import AdminRooms from "./pages/admin/AdminRooms";
+import AdminPayments from "./pages/admin/AdminPayments";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminReports from "./pages/admin/AdminReports";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -57,6 +67,14 @@ const App = () => (
               </ProtectedRoute>
             }>
               <Route index element={<AdminDashboard />} />
+              <Route path="reservations" element={<AdminReservations />} />
+              <Route path="guests" element={<AdminGuests />} />
+              <Route path="services" element={<AdminServices />} />
+              <Route path="employees" element={<AdminEmployees />} />
+              <Route path="rooms" element={<AdminRooms />} />
+              <Route path="payments" element={<AdminPayments />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
+              <Route path="reports" element={<AdminReports />} />
             </Route>
             
             {/* 404 Route */}
