@@ -20,6 +20,7 @@ interface AuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isEmployee: boolean;
   isLoading: boolean;
 }
 
@@ -70,6 +71,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           description: "Welcome to the Ceylon Serenity Resort admin portal."
         });
         navigate('/admin');
+        return;
+      }
+
+      // Employee login
+      if (email === 'employee@ceylon.com' && password === 'employee123') {
+        const employeeUser = {
+          id: 'emp1',
+          name: 'Employee User',
+          email: 'employee@ceylon.com',
+          role: 'employee' as UserRole
+        };
+        setUser(employeeUser);
+        localStorage.setItem('ceylon_user', JSON.stringify(employeeUser));
+        toast({
+          title: "Employee Login Successful",
+          description: "Welcome to the Ceylon Serenity Resort employee portal."
+        });
+        navigate('/employee');
         return;
       }
       
@@ -155,6 +174,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       logout,
       isAuthenticated: !!user,
       isAdmin: user?.role === 'admin',
+      isEmployee: user?.role === 'employee',
       isLoading
     }}>
       {children}

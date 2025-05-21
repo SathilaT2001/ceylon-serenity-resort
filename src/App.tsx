@@ -18,7 +18,7 @@ import Services from "./pages/Services";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 
-// Placeholder pages for admin routes
+// Admin routes
 import AdminReservations from "./pages/admin/AdminReservations";
 import AdminGuests from "./pages/admin/AdminGuests";
 import AdminServices from "./pages/admin/AdminServices";
@@ -27,6 +27,11 @@ import AdminRooms from "./pages/admin/AdminRooms";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminReports from "./pages/admin/AdminReports";
+
+// Employee routes
+import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
+import RoomInventory from "./pages/employee/RoomInventory";
+import ServiceRequests from "./pages/employee/ServiceRequests";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +80,17 @@ const App = () => (
               <Route path="payments" element={<AdminPayments />} />
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="reports" element={<AdminReports />} />
+            </Route>
+
+            {/* Employee Routes */}
+            <Route path="/employee" element={
+              <ProtectedRoute allowedRoles={['employee']}>
+                <AppLayout showSidebar={true} />
+              </ProtectedRoute>
+            }>
+              <Route index element={<EmployeeDashboard />} />
+              <Route path="room-inventory" element={<RoomInventory />} />
+              <Route path="service-requests" element={<ServiceRequests />} />
             </Route>
             
             {/* 404 Route */}

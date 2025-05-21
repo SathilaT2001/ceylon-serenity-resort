@@ -3,16 +3,19 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
   Users, Calendar, Home, Settings, CreditCard, 
-  FileText, ChartBar, Plus
+  FileText, ChartBar, Plus, User, Check, Clipboard, Bed, List
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
+  const { isAdmin, isEmployee } = useAuth();
 
+  // Admin Navigation Items
   const mainNavItems = [
     { icon: Home, label: 'Dashboard', href: '/admin' },
     { icon: Calendar, label: 'Reservations', href: '/admin/reservations' },
@@ -22,13 +25,20 @@ const Sidebar: React.FC = () => {
 
   const managementNavItems = [
     { icon: Users, label: 'Employees', href: '/admin/employees' },
-    { icon: Settings, label: 'Rooms', href: '/admin/rooms' },
+    { icon: Bed, label: 'Rooms', href: '/admin/rooms' },
     { icon: CreditCard, label: 'Payments', href: '/admin/payments' },
   ];
 
   const reportsNavItems = [
     { icon: ChartBar, label: 'Analytics', href: '/admin/analytics' },
     { icon: FileText, label: 'Reports', href: '/admin/reports' },
+  ];
+
+  // Employee Navigation Items
+  const employeeNavItems = [
+    { icon: Home, label: 'Dashboard', href: '/employee' },
+    { icon: Bed, label: 'Room Inventory', href: '/employee/room-inventory' },
+    { icon: List, label: 'Service Requests', href: '/employee/service-requests' },
   ];
 
   const NavItem = ({ icon: Icon, label, href }: { icon: any; label: string; href: string }) => {
@@ -54,38 +64,55 @@ const Sidebar: React.FC = () => {
     <div className="hidden md:flex h-screen w-64 flex-col border-r bg-card">
       <ScrollArea className="flex-1">
         <div className="space-y-4 py-4">
-          <div className="px-3 py-2">
-            <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-              Admin Portal
-            </h2>
-            <div className="space-y-1">
-              {mainNavItems.map((item, index) => (
-                <NavItem key={index} {...item} />
-              ))}
+          {isAdmin && (
+            <>
+              <div className="px-3 py-2">
+                <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+                  Admin Portal
+                </h2>
+                <div className="space-y-1">
+                  {mainNavItems.map((item, index) => (
+                    <NavItem key={index} {...item} />
+                  ))}
+                </div>
+              </div>
+              <Separator />
+              <div className="px-3 py-2">
+                <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+                  Management
+                </h2>
+                <div className="space-y-1">
+                  {managementNavItems.map((item, index) => (
+                    <NavItem key={index} {...item} />
+                  ))}
+                </div>
+              </div>
+              <Separator />
+              <div className="px-3 py-2">
+                <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+                  Reports
+                </h2>
+                <div className="space-y-1">
+                  {reportsNavItems.map((item, index) => (
+                    <NavItem key={index} {...item} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {isEmployee && (
+            <div className="px-3 py-2">
+              <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+                Employee Portal
+              </h2>
+              <div className="space-y-1">
+                {employeeNavItems.map((item, index) => (
+                  <NavItem key={index} {...item} />
+                ))}
+              </div>
             </div>
-          </div>
-          <Separator />
-          <div className="px-3 py-2">
-            <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-              Management
-            </h2>
-            <div className="space-y-1">
-              {managementNavItems.map((item, index) => (
-                <NavItem key={index} {...item} />
-              ))}
-            </div>
-          </div>
-          <Separator />
-          <div className="px-3 py-2">
-            <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-              Reports
-            </h2>
-            <div className="space-y-1">
-              {reportsNavItems.map((item, index) => (
-                <NavItem key={index} {...item} />
-              ))}
-            </div>
-          </div>
+          )}
         </div>
       </ScrollArea>
       <div className="p-4">

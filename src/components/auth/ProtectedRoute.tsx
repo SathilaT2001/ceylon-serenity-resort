@@ -1,24 +1,25 @@
 
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth, UserRole } from '@/contexts/AuthContext';
-import { Loader } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { UserRole } from '@/contexts/AuthContext';
+import { Spinner } from '@/components/ui/spinner';
 
 interface ProtectedRouteProps {
   children?: React.ReactNode;
-  allowedRoles: UserRole[];
+  allowedRoles?: UserRole[];
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
+  children, 
+  allowedRoles = ['guest', 'admin', 'employee'] 
+}) => {
   const { user, isAuthenticated, isLoading } = useAuth();
-
+  
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <Loader className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
+      <div className="flex h-screen items-center justify-center">
+        <Spinner className="h-8 w-8" />
       </div>
     );
   }
@@ -27,8 +28,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
     return <Navigate to="/auth" replace />;
   }
 
-  if (!user || !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
+  const hasAllowedRole = user && allowedRoles.includes(user.role);
+
+  if (!hasAllowedRole) {
+    // Redirect based on role
+    if (user?.role === 'admin') {
+      return <Navigate to="/admin" replace />;
+    } else if (user?.role === 'employee') {
+      return <Navigate to="/employee" replace />;
+    } else {
+      return <Navigate to="/dashboard" replace />;
+    }
   }
 
   return <>{children || <Outlet />}</>;
