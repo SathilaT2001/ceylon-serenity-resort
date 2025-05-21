@@ -2,13 +2,14 @@
 import React from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Wifi, Utensils, Spa, CreditCard } from 'lucide-react';
 
 interface Service {
   id: string;
   name: string;
   description: string;
   price: number;
-  icon: string;
+  icon: React.ReactNode;
 }
 
 interface ServiceSelectorProps {
@@ -35,7 +36,9 @@ const ServiceSelector: React.FC<ServiceSelectorProps> = ({
           onClick={() => onToggleService(service.id)}
         >
           <div className="flex items-start space-x-3">
-            <div className="text-2xl">{service.icon}</div>
+            <div className="text-2xl">
+              {service.icon}
+            </div>
             <div className="flex-1">
               <div className="flex justify-between mb-1">
                 <h4 className="font-medium">{service.name}</h4>

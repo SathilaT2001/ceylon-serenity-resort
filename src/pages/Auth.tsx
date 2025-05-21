@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,11 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Auth = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login, signup, isAuthenticated } = useAuth();
   
   // Check if we should display the signup tab by default
   const searchParams = new URLSearchParams(location.search);
@@ -36,22 +38,25 @@ const Auth = () => {
     contactNumber: '',
   });
   
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+  
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // In a real app, this would be a call to your authentication API
-    setTimeout(() => {
+    try {
+      await login(loginData.email, loginData.password);
+    } finally {
       setIsSubmitting(false);
-      toast({
-        title: "Login Successful",
-        description: "Welcome back to Ceylon Serenity Resort.",
-      });
-      navigate('/dashboard');
-    }, 1000);
+    }
   };
   
-  const handleSignupSubmit = (e: React.FormEvent) => {
+  const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (signupData.password !== signupData.confirmPassword) {
@@ -65,15 +70,11 @@ const Auth = () => {
     
     setIsSubmitting(true);
     
-    // In a real app, this would be a call to your registration API
-    setTimeout(() => {
+    try {
+      await signup(signupData);
+    } finally {
       setIsSubmitting(false);
-      toast({
-        title: "Registration Successful",
-        description: "Your account has been created successfully.",
-      });
-      navigate('/dashboard');
-    }, 1000);
+    }
   };
   
   return (
@@ -141,17 +142,23 @@ const Auth = () => {
                     </Button>
                     
                     <div className="text-center text-sm">
-                      Don't have an account?{" "}
-                      <a 
-                        href="#" 
-                        className="text-primary hover:underline"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setActiveTab('signup');
-                        }}
-                      >
-                        Sign up
-                      </a>
+                      <p className="text-muted-foreground mb-1">Demo Credentials:</p>
+                      <p className="text-muted-foreground text-xs">Admin: admin@ceylon.com / admin123</p>
+                      <p className="text-muted-foreground text-xs mb-3">Guest: guest@example.com / guest123</p>
+                      
+                      <div className="mt-2">
+                        Don't have an account?{" "}
+                        <a 
+                          href="#" 
+                          className="text-primary hover:underline"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setActiveTab('signup');
+                          }}
+                        >
+                          Sign up
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </form>

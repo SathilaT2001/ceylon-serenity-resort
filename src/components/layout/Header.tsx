@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, User, Calendar, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +17,8 @@ import {
 const Header: React.FC = () => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   const menuItems = [
     { name: 'Home', path: '/' },
@@ -53,39 +56,70 @@ const Header: React.FC = () => {
           {/* User actions */}
           <div className="flex items-center space-x-4">
             {!isMobile && (
-              <Button variant="ghost" size="sm" className="hidden md:flex">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="hidden md:flex"
+                onClick={() => navigate('/booking')}
+              >
                 <Calendar className="h-4 w-4 mr-2" />
                 <span>Book Now</span>
               </Button>
             )}
 
             {/* Bell icon */}
-            <Button variant="ghost" size="icon">
-              <Bell className="h-5 w-5" />
-            </Button>
+            {isAuthenticated && (
+              <Button variant="ghost" size="icon">
+                <Bell className="h-5 w-5" />
+              </Button>
+            )}
 
             {/* User menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-primary text-white">
+                    <AvatarFallback className={isAuthenticated ? "bg-primary text-white" : "bg-muted text-muted-foreground"}>
                       <User className="h-4 w-4" />
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem>
-                  <Link to="/auth" className="w-full">Sign In</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="/auth?mode=signup" className="w-full">Register</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link to="/admin" className="w-full">Admin</Link>
-                </DropdownMenuItem>
+                {isAuthenticated ? (
+                  <>
+                    <div className="px-2 py-1.5">
+                      <p className="text-sm font-medium">{user?.name}</p>
+                      <p className="text-xs text-muted-foreground">{user?.email}</p>
+                    </div>
+                    <DropdownMenuSeparator />
+                    {isAdmin ? (
+                      <DropdownMenuItem>
+                        <Link to="/admin" className="w-full">Admin Dashboard</Link>
+                      </DropdownMenuItem>
+                    ) : (
+                      <DropdownMenuItem>
+                        <Link to="/dashboard" className="w-full">My Dashboard</Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem onSelect={() => logout()}>
+                      Log Out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem>
+                      <Link to="/auth" className="w-full">Sign In</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="/auth?mode=signup" className="w-full">Register</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link to="/admin" className="w-full">Admin</Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
 
