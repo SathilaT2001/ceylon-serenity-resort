@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Plus, Bath, Wifi, Utensils, CreditCard, Edit, Trash } from 'lucide-react';
@@ -9,25 +8,22 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
+import { Spinner } from '@/components/ui/spinner';
 
 interface Service {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  icon: React.ReactNode;
+  Service_ID: string;
+  Name: string;
+  Description: string;
+  Price: number;
+  icon?: React.ReactNode;
 }
 
-const AdminServices = () => {
-  // Mock data for services
-  const initialServices: Service[] = [
-    { id: 'S001', name: 'Premium Wi-Fi', description: 'High-speed internet access', price: 10, icon: <Wifi className="h-4 w-4" /> },
-    { id: 'S002', name: 'Breakfast Buffet', description: 'Full breakfast with local and international cuisine', price: 25, icon: <Utensils className="h-4 w-4" /> },
-    { id: 'S003', name: 'Spa Package', description: 'Full body massage and wellness treatments', price: 120, icon: <Bath className="h-4 w-4" /> },
-    { id: 'S004', name: 'Airport Transfer', description: 'Private transportation to/from airport', price: 45, icon: <CreditCard className="h-4 w-4" /> },
-  ];
 
-  const [services, setServices] = useState<Service[]>(initialServices);
+
+const AdminServices = () => {
+  const [services, setServices] = useState<Service[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -39,10 +35,32 @@ const AdminServices = () => {
     price: 0
   });
 
+  const fetchServices = async () => {
+    try {
+      const response = await fetch('/api/services');
+      if (!response.ok) throw new Error('Failed to fetch services');
+      const data = await response.json();
+      setServices(data);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch services. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
   const handleAddService = () => {
     setIsEditMode(false);
+    const nextId = `S${String(services.length + 1).padStart(3, '0')}`;
     setFormData({
-      id: `S${String(services.length + 1).padStart(3, '0')}`,
+      id: nextId,
       name: '',
       description: '',
       price: 0
@@ -53,10 +71,10 @@ const AdminServices = () => {
   const handleEditService = (service: Service) => {
     setIsEditMode(true);
     setFormData({
-      id: service.id,
-      name: service.name,
-      description: service.description,
-      price: service.price
+      id: service.Service_ID,
+      name: service.Name,
+      description: service.Description,
+      price: service.Price
     });
     setCurrentService(service);
     setIsDialogOpen(true);
@@ -67,14 +85,31 @@ const AdminServices = () => {
     setIsDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (currentService) {
-      setServices(services.filter(s => s.id !== currentService.id));
-      toast({
-        title: "Service Deleted",
-        description: `${currentService.name} has been removed from services.`
-      });
-      setIsDeleteDialogOpen(false);
+      setIsSubmitting(true);
+      try {
+        const response = await fetch(`/api/services/${currentService.Service_ID}`, {
+          method: 'DELETE',
+        });
+        
+        if (!response.ok) throw new Error('Failed to delete service');
+        
+        await fetchServices();
+        toast({
+          title: "Service Deleted",
+          description: `${currentService.Name} has been removed from services.`
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to delete service. Please try again later.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsSubmitting(false);
+        setIsDeleteDialogOpen(false);
+      }
     }
   };
 
@@ -86,44 +121,45 @@ const AdminServices = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    if (isEditMode && currentService) {
-      // Update existing service
-      setServices(services.map(service => 
-        service.id === currentService.id ? 
-        { 
-          ...service, 
-          name: formData.name,
-          description: formData.description,
-          price: formData.price
-        } : service
-      ));
-      
-      toast({
-        title: "Service Updated",
-        description: `${formData.name} has been updated successfully.`
-      });
-    } else {
-      // Add new service
-      const newService: Service = {
+    try {
+      const serviceData = {
         id: formData.id,
         name: formData.name,
         description: formData.description,
-        price: formData.price,
-        icon: <Utensils className="h-4 w-4" /> // Default icon, in a real app you'd let them choose
+        price: formData.price
       };
-      
-      setServices([...services, newService]);
+
+      const response = await fetch(`/api/services${isEditMode ? `/${formData.id}` : ''}`, {
+        method: isEditMode ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(serviceData),
+      });
+
+      if (!response.ok) throw new Error('Failed to save service');
+
+      await fetchServices();
       
       toast({
-        title: "Service Added",
-        description: `${formData.name} has been added to services.`
+        title: isEditMode ? "Service Updated" : "Service Added",
+        description: `${formData.name} has been ${isEditMode ? 'updated' : 'added'} successfully.`
       });
+      
+      setIsDialogOpen(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: `Failed to ${isEditMode ? 'update' : 'add'} service. Please try again later.`,
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsDialogOpen(false);
   };
 
   return (
@@ -140,40 +176,46 @@ const AdminServices = () => {
           <CardTitle>Available Services</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Service</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {services.map((service) => (
-                <TableRow key={service.id}>
-                  <TableCell>{service.id}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <div className="mr-2">{service.icon}</div>
-                      {service.name}
-                    </div>
-                  </TableCell>
-                  <TableCell>{service.description}</TableCell>
-                  <TableCell>${service.price}</TableCell>
-                  <TableCell>
-                    <Button variant="ghost" size="sm" onClick={() => handleEditService(service)}>
-                      <Edit className="h-4 w-4 mr-1" /> Edit
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-red-500" onClick={() => handleDeleteService(service)}>
-                      <Trash className="h-4 w-4 mr-1" /> Delete
-                    </Button>
-                  </TableCell>
+          {isLoading ? (
+            <div className="flex justify-center py-4">
+              <Spinner />
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Service</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {services.map((service) => (
+                  <TableRow key={service.Service_ID}>
+                    <TableCell>{service.Service_ID}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center">
+                        
+                        {service.Name}
+                      </div>
+                    </TableCell>
+                    <TableCell>{service.Description}</TableCell>
+                    <TableCell>${service.Price}</TableCell>
+                    <TableCell>
+                      <Button variant="ghost" size="sm" onClick={() => handleEditService(service)}>
+                        <Edit className="h-4 w-4 mr-1" /> Edit
+                      </Button>
+                      <Button variant="ghost" size="sm" className="text-red-500" onClick={() => handleDeleteService(service)}>
+                        <Trash className="h-4 w-4 mr-1" /> Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
@@ -220,8 +262,13 @@ const AdminServices = () => {
               />
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-              <Button type="submit">{isEditMode ? 'Update' : 'Add'} Service</Button>
+              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isSubmitting}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? <Spinner className="mr-2 h-4 w-4" /> : null}
+                {isEditMode ? 'Update' : 'Add'} Service
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -233,10 +280,15 @@ const AdminServices = () => {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete {currentService?.name}? This action cannot be undone.</p>
+          <p>Are you sure you want to delete {currentService?.Name}? This action cannot be undone.</p>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
-            <Button type="button" variant="destructive" onClick={confirmDelete}>Delete Service</Button>
+            <Button type="button" variant="outline" onClick={() => setIsDeleteDialogOpen(false)} disabled={isSubmitting}>
+              Cancel
+            </Button>
+            <Button type="button" variant="destructive" onClick={confirmDelete} disabled={isSubmitting}>
+              {isSubmitting ? <Spinner className="mr-2 h-4 w-4" /> : null}
+              Delete Service
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
